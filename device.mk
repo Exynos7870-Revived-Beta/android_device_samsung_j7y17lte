@@ -16,6 +16,12 @@
 
 DEVICE_PATH := device/samsung/j7y17lte
 
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH)
+
+# Launch Android API level
+PRODUCT_SHIPPING_API_LEVEL := 24
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml \
@@ -27,7 +33,8 @@ PRODUCT_COPY_FILES += \
 # Custom mixer_paths
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/audio/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml \
-    $(DEVICE_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
+    $(DEVICE_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
+    $(DEVICE_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
 
 # Bootanimation
 TARGET_SCREEN_HEIGHT := 1920
@@ -40,12 +47,14 @@ PRODUCT_AAPT_PREBUILT_DPI := xxhdpi xhdpi hdpi
 
 # Bluetooth
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-impl.7870 \
-    android.hardware.bluetooth@1.0-service \
-    libbt-vendor
+    android.hardware.bluetooth.audio@2.0-impl \
+    audio.bluetooth.default
 
-PRODUCT_COPY_FILES += \
-    $(DEVICE_PATH)/bluetooth/bt_vendor.conf:vendor/etc/bluetooth/bt_vendor.conf
+# Radio (broadcastradio)
+PRODUCT_PACKAGES += \
+    android.hardware.broadcastradio@1.0-impl \
+    android.hardware.broadcastradio@1.0 \
+    android.hardware.broadcastradio@1.1
 
 # Fingerprint
 PRODUCT_PACKAGES += \
@@ -57,7 +66,8 @@ PRODUCT_PACKAGES += \
     libnfc_nci_jni \
     NfcNci \
     Tag \
-    com.android.nfc_extras
+    com.android.nfc_extras \
+    android.hardware.nfc@1.2.vendor
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
@@ -66,7 +76,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     mobicore.rc \
-    wifi_device.rc
+    init.wifi_device.rc
 
 # Shims
 PRODUCT_PACKAGES += \
@@ -91,6 +101,13 @@ PRODUCT_COPY_FILES += \
 
 # Properties
 -include $(DEVICE_PATH)/vendor_prop.mk
+
+# Audio
+TARGET_DEVICE_HAS_OSS_AUDIO_HAL := true
+TARGET_DEVICE_HAS_PREBUILT_AUDIO_HAL := false
+TARGET_DEVICE_HAS_A6LTE_AUDIO_HAL := false
+TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL := false
+TARGET_DEVICE_HAS_TFA_AMP := false
 
 # Inherit from common
 $(call inherit-product, device/samsung/universal7870-common/device-common.mk)

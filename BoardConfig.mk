@@ -16,7 +16,14 @@
 DEVICE_PATH := device/samsung/j7y17lte
 
 # Audio
-BOARD_USE_TFA_AMP := true
+TARGET_BOARD_HAS_OSS_AUDIO_HAL := true
+TARGET_BOARD_HAS_A6LTE_AUDIO_HAL := false
+TARGET_BOARD_HAS_M10LTE_AUDIO_HAL := false
+TARGET_BOARD_HAS_TFA_AMP := false
+BOARD_USES_EXYNOS7870_TFA_AMP := false
+
+# Display
+TARGET_SCREEN_DENSITY := 420
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := j7y17lte,j7y17ltexx,j7y17ltextc
@@ -33,6 +40,9 @@ TARGET_KERNEL_CONFIG := exynos7870-j7y17lte_defconfig
 
 # HIDL
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/configs/manifest.xml
+
+# misc
+BUILD_BROKEN_VINTF_PRODUCT_COPY_FILES := true
 
 # Init
 TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_j7y17lte
